@@ -9,3 +9,7 @@
 ## .yml
 
 <a href="https://asciinema.org/a/S7it11en6NAs9Q7ADbHcuVg0d" target="_blank"><img src="https://asciinema.org/a/S7it11en6NAs9Q7ADbHcuVg0d.svg" /></a>
+
+## .ini
+
+<a href="https://asciinema.org/a/gM39FYitg3V3AthGjsgp6192W" target="_blank"><img src="https://asciinema.org/a/gM39FYitg3V3AthGjsgp6192W.svg" /></a>
