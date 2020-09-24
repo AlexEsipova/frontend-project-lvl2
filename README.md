@@ -2,4 +2,10 @@
 
 # gendiff
 
+## .json
+
 <a href="https://asciinema.org/a/91IhIYc5UqxdCfkBeO40puSPX" target="_blank"><img src="https://asciinema.org/a/91IhIYc5UqxdCfkBeO40puSPX.svg" /></a>
+
+## .yml
+
+<a href="https://asciinema.org/a/S7it11en6NAs9Q7ADbHcuVg0d" target="_blank"><img src="https://asciinema.org/a/S7it11en6NAs9Q7ADbHcuVg0d.svg" /></a>

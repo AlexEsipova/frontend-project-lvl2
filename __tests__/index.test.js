@@ -8,5 +8,7 @@ const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf8')
 
 test('gendiff', () => {
   expect(genDiff(getFixturePath('before.json'), getFixturePath('after.json')))
-    .toBe((readFile('json_expected.txt')));
+    .toBe((readFile('expected.txt')));
+  expect(genDiff(getFixturePath('before.yml'), getFixturePath('after.yml')))
+    .toBe((readFile('expected.txt')));
 });

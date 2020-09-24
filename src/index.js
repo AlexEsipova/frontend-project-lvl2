@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import fs from 'fs';
+import parser from './parsers.js';
 
 const genDiff = (file1, file2) => {
-  const obj1 = JSON.parse(fs.readFileSync(file1));
-  const obj2 = JSON.parse(fs.readFileSync(file2));
+  const obj1 = parser(file1);
+  const obj2 = parser(file2);
   const keys = Object.keys({ ...obj1, ...obj2 });
   const sortedKeys = keys.sort();
   const result = [];
