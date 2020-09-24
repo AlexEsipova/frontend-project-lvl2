@@ -9,17 +9,17 @@ const genDiff = (file1, file2) => {
   const result = [];
   sortedKeys.forEach((key) => {
     if (!_.has(obj2, key)) {
-      result.push([`- ${key}`, obj1[key]]);
+      result.push([`- ${key}: ${obj1[key]}`]);
     } else if (!_.has(obj1, key)) {
-      result.push([`+ ${key}`, obj2[key]]);
+      result.push([`+ ${key}: ${obj2[key]}`]);
     } else if (obj1[key] === obj2[key]) {
-      result.push([`  ${key}`, obj1[key]]);
+      result.push([`  ${key}: ${obj1[key]}`]);
     } else {
-      result.push([`- ${key}`, obj1[key]]);
-      result.push([`+ ${key}`, obj2[key]]);
+      result.push([`- ${key}: ${obj1[key]}`]);
+      result.push([`+ ${key}: ${obj2[key]}`]);
     }
   });
-  return Object.fromEntries(result);
+  return `{\n  ${result.join('\n  ')}\n}`;
 };
 
 export default genDiff;

@@ -2,4 +2,4 @@
 
 # gendiff
 
-<a href="https://asciinema.org/a/dZoxaqIezNoxU8cccYn6lZ7z9" target="_blank"><img src="https://asciinema.org/a/dZoxaqIezNoxU8cccYn6lZ7z9.svg" /></a>
+<a href="https://asciinema.org/a/91IhIYc5UqxdCfkBeO40puSPX" target="_blank"><img src="https://asciinema.org/a/91IhIYc5UqxdCfkBeO40puSPX.svg" /></a>

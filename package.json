@@ -26,9 +26,7 @@
   "homepage": "https://github.com/AlexEsipova/frontend-project-lvl2#readme",
   "dependencies": {
     "commander": "^6.0.0",
-    "fs": "0.0.1-security",
-    "lodash": "^4.17.20",
-    "path": "^0.12.7"
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "@jest/globals": "^26.4.2",
