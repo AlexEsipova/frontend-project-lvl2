@@ -3,7 +3,7 @@ import path from 'path';
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const parser = (filepath) => {
+const formatParser = (filepath) => {
   const readFile = (file) => fs.readFileSync(file, 'utf8');
   const extname = path.extname(filepath);
   if (extname === '.json') {
@@ -15,4 +15,4 @@ const parser = (filepath) => {
   return ini.parse(readFile(filepath));
 };
 
-export default parser;
+export default formatParser;
