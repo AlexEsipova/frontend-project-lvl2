@@ -13,3 +13,7 @@
 ## .ini
 
 <a href="https://asciinema.org/a/gM39FYitg3V3AthGjsgp6192W" target="_blank"><img src="https://asciinema.org/a/gM39FYitg3V3AthGjsgp6192W.svg" /></a>
+
+## nested
+
+<a href="https://asciinema.org/a/NmYrBzbnkKFPMPzf11TF52okZ" target="_blank"><img src="https://asciinema.org/a/NmYrBzbnkKFPMPzf11TF52okZ.svg" /></a>
