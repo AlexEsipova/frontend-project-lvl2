@@ -6,13 +6,6 @@ const added = '+ ';
 const deleted = '- ';
 const unchanged = '  ';
 
-const isObject = (item) => {
-  if (typeof item === 'object') {
-    return true;
-  }
-  return false;
-};
-
 const genDiff = (file1, file2) => {
   const newObj1 = formatParser(file1);
   const newObj2 = formatParser(file2);
@@ -21,7 +14,7 @@ const genDiff = (file1, file2) => {
     const sortedKeys = keys.sort();
     const result = [];
     sortedKeys.map((key) => {
-      if (isObject(obj1[key]) && isObject(obj2[key])) {
+      if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
         result.push([`${unchanged}${key}`, findDiff(obj1[key], obj2[key])]);
       } else if (!_.has(obj2, key)) {
         result.push([`${deleted}${key}`, obj1[key]]);
@@ -35,9 +28,9 @@ const genDiff = (file1, file2) => {
       }
       return result;
     });
-    return buildTree(Object.fromEntries(result));
+    return Object.fromEntries(result);
   };
-  return findDiff(newObj1, newObj2);
+  return buildTree(findDiff(newObj1, newObj2));
 };
 
 export default genDiff;
