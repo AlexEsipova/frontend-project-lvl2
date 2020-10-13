@@ -7,10 +7,16 @@ const getFixturePath = (filename) => path.join('__fixtures__', filename);
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf8');
 
 test.each([
-  ['.json'],
-  ['.yml'],
-  ['.ini'],
-])('gendiff', (format) => {
-  expect(genDiff(getFixturePath(`before_structural${format}`), getFixturePath(`after_structural${format}`)))
-    .toBe((readFile('expected_structural.txt')));
+  ['.json', 'stylish', 'expected_stylish.txt'],
+  ['.json', 'plain', 'expected_plain.txt'],
+  ['.json', 'json', 'expected_json.txt'],
+  ['.yml', 'stylish', 'expected_stylish.txt'],
+  ['.yml', 'plain', 'expected_plain.txt'],
+  ['.yml', 'json', 'expected_json.txt'],
+  ['.ini', 'stylish', 'expected_stylish.txt'],
+  ['.ini', 'plain', 'expected_plain.txt'],
+  ['.ini', 'json', 'expected_json.txt'],
+])('gendiff', (format, outputFormat, expected) => {
+  expect(genDiff(getFixturePath(`before${format}`), getFixturePath(`after${format}`), outputFormat))
+    .toBe((readFile(expected)));
 });

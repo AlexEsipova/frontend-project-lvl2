@@ -1,12 +1,9 @@
 import _ from 'lodash';
-import formatParser from './parsers.js';
-import buildTree from './build_tree.js';
+import { formatParser, resolveKey } from './parsers.js';
+import selectFormatter from './formatters/index.js';
 
-const added = '+ ';
-const deleted = '- ';
-const unchanged = '  ';
-
-const genDiff = (file1, file2) => {
+const genDiff = (file1, file2, format) => {
+  const buildFormattedOutput = selectFormatter(format);
   const newObj1 = formatParser(file1);
   const newObj2 = formatParser(file2);
   const findDiff = (obj1, obj2) => {
@@ -15,22 +12,22 @@ const genDiff = (file1, file2) => {
     const result = [];
     sortedKeys.map((key) => {
       if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
-        result.push([`${unchanged}${key}`, findDiff(obj1[key], obj2[key])]);
+        result.push([key, { value1: findDiff(obj1[key], obj2[key]), type: 'unchanged' }]);
       } else if (!_.has(obj2, key)) {
-        result.push([`${deleted}${key}`, obj1[key]]);
+        result.push([key, { value1: resolveKey(obj1[key]), type: 'deleted' }]);
       } else if (!_.has(obj1, key)) {
-        result.push([`${added}${key}`, obj2[key]]);
+        result.push([key, { value1: resolveKey(obj2[key]), type: 'added' }]);
       } else if (obj1[key] === obj2[key]) {
-        result.push([`${unchanged}${key}`, obj1[key]]);
+        result.push([key, { value1: resolveKey(obj1[key]), type: 'unchanged' }]);
       } else {
-        result.push([`${deleted}${key}`, obj1[key]]);
-        result.push([`${added}${key}`, obj2[key]]);
+        result.push([key, { value1: resolveKey(obj1[key]), value2: resolveKey(obj2[key]), type: 'changed' }]);
       }
       return result;
     });
     return Object.fromEntries(result);
   };
-  return buildTree(findDiff(newObj1, newObj2));
+  const internalTree = findDiff(newObj1, newObj2);
+  return buildFormattedOutput(internalTree);
 };
 
 export default genDiff;
