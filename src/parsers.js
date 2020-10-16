@@ -30,6 +30,9 @@ export const formatParser = (filepath) => {
 };
 
 export const resolveKey = (value) => {
+  if (value === null) {
+    return `${value}`;
+  }
   if (typeof value !== 'object') {
     return value;
   }
