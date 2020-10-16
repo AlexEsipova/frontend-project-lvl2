@@ -1,6 +1,6 @@
 const resolveValue = (item) => {
   if (typeof item !== 'object') {
-    if (typeof item === 'boolean') {
+    if (typeof item !== 'string' || item === 'null') {
       return `${item}`;
     }
     return `'${item}'`;
