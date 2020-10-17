@@ -7,9 +7,8 @@ const genDiff = (file1, file2, format = 'stylish') => {
   const newObj1 = formatParser(file1);
   const newObj2 = formatParser(file2);
   const findDiff = (obj1, obj2) => {
-    const keys = Object.keys({ ...obj1, ...obj2 });
-    const sortedKeys = [...keys].sort();
-    const result = sortedKeys.map((key) => {
+    const keys = Object.keys({ ...obj1, ...obj2 }).sort();
+    const result = keys.map((key) => {
       if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
         return [key, { value1: findDiff(obj1[key], obj2[key]), type: 'unchanged' }];
       }
