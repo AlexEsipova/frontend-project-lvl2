@@ -9,20 +9,20 @@ const genDiff = (file1, file2, format = 'stylish') => {
   const findDiff = (obj1, obj2) => {
     const keys = Object.keys({ ...obj1, ...obj2 });
     const sortedKeys = keys.sort();
-    const result = [];
-    sortedKeys.map((key) => {
+    const result = sortedKeys.map((key) => {
       if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
-        result.push([key, { value1: findDiff(obj1[key], obj2[key]), type: 'unchanged' }]);
-      } else if (!_.has(obj2, key)) {
-        result.push([key, { value1: resolveKey(obj1[key]), type: 'deleted' }]);
-      } else if (!_.has(obj1, key)) {
-        result.push([key, { value1: resolveKey(obj2[key]), type: 'added' }]);
-      } else if (obj1[key] === obj2[key]) {
-        result.push([key, { value1: resolveKey(obj1[key]), type: 'unchanged' }]);
-      } else {
-        result.push([key, { value1: resolveKey(obj1[key]), value2: resolveKey(obj2[key]), type: 'changed' }]);
+        return [key, { value1: findDiff(obj1[key], obj2[key]), type: 'unchanged' }];
       }
-      return result;
+      if (!_.has(obj2, key)) {
+        return [key, { value1: resolveKey(obj1[key]), type: 'deleted' }];
+      }
+      if (!_.has(obj1, key)) {
+        return [key, { value1: resolveKey(obj2[key]), type: 'added' }];
+      }
+      if (obj1[key] === obj2[key]) {
+        return [key, { value1: resolveKey(obj1[key]), type: 'unchanged' }];
+      }
+      return [key, { value1: resolveKey(obj1[key]), value2: resolveKey(obj2[key]), type: 'changed' }];
     });
     return Object.fromEntries(result);
   };

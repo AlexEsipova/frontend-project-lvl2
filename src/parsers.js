@@ -37,13 +37,11 @@ export const resolveKey = (value) => {
     return value;
   }
   const keys = Object.keys(value);
-  const result = [];
-  keys.forEach((key) => {
+  const result = keys.map((key) => {
     if (typeof value[key] === 'object') {
-      result.push([key, { value1: resolveKey(value[key]) }]);
-    } else {
-      result.push([key, { value1: value[key] }]);
+      return [key, { value1: resolveKey(value[key]) }];
     }
+    return [key, { value1: value[key] }];
   });
   return Object.fromEntries(result);
 };
