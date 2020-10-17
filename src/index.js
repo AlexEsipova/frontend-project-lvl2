@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { formatParser, resolveKey } from './parsers.js';
 import selectFormatter from './formatters/index.js';
 
-const genDiff = (file1, file2, format) => {
+const genDiff = (file1, file2, format = 'stylish') => {
   const buildFormattedOutput = selectFormatter(format);
   const newObj1 = formatParser(file1);
   const newObj2 = formatParser(file2);
