@@ -4,10 +4,8 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  - push
+  - pull_request
 
 jobs:
   build:
@@ -24,12 +22,21 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install
-    - run: |
+    - name: npm install, npm ci    
+      # Install package and deps
+      run: make install
+    - name: Run linter
+      # Run Linter
+      run: |
           make lint
-    - run: |
+    - name: Test & publish code coverage 
+      # Run tests
+      run: |
           make test
-    - uses: paambaati/codeclimate-action@v2.6.0
+      # Publish code coverage on Code Climate
+      # https://github.com/paambaati/codeclimate-action
+      uses: paambaati/codeclimate-action@v2.6.0
+      # Add Code Climate secret key
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       with:

@@ -35,7 +35,6 @@ const buildPlain = (value) => {
 
     return lines.join('\n');
   };
-
   return iter(value, '');
 };
 

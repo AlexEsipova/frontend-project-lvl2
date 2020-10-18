@@ -4,7 +4,7 @@
   "description": "Compares two configuration files and shows a difference.",
   "main": "src/index.js",
   "bin": {
-    "gendiff": "src/bin/gendiff.js"
+    "gendiff": "bin/gendiff.js"
   },
   "scripts": {
     "test": "npx -n --experimental-vm-modules jest"
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/AlexEsipova/frontend-project-lvl2.git"
   },
-  "author": "",
+  "author": "Aleksandra Demianova",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/AlexEsipova/frontend-project-lvl2/issues"
