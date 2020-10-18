@@ -10,11 +10,11 @@ const formatsAndExpected = [
   ['stylish', readFile('expected_stylish.txt')],
   ['plain', readFile('expected_plain.txt')],
   ['json', readFile('expected_json.txt')],
-]
+];
 
 describe.each(extentions)('extension %s', (extention) => {
   test.each(formatsAndExpected)('gendiff', (format, expected) => {
     expect(genDiff(getFixturePath(`before${extention}`), getFixturePath(`after${extention}`), format))
       .toBe(expected);
   });
-})
+});
