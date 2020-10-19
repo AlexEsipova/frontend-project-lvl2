@@ -1,11 +1,11 @@
 const resolveValue = (item) => {
-  if (typeof item !== 'object') {
-    if (typeof item !== 'string' || item === 'null') {
-      return `${item}`;
-    }
-    return `'${item}'`;
+  if (typeof item === 'object') {
+    return '[complex value]';
   }
-  return '[complex value]';
+  if (typeof item !== 'string' || item === 'null') {
+    return `${item}`;
+  }
+  return `'${item}'`;
 };
 
 const buildPlain = (value) => {
