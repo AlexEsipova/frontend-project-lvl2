@@ -29,11 +29,7 @@ jobs:
       # Run Linter
       run: |
           make lint
-    - name: Test
-      # Run tests
-      run: |
-          make test
-    - name: Publish code coverage
+    - name: Test & Publish code coverage
       # Publish code coverage on Code Climate
       # https://github.com/paambaati/codeclimate-action
       uses: paambaati/codeclimate-action@v2.6.0
