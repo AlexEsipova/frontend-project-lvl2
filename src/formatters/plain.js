@@ -13,18 +13,18 @@ const buildPlain = (value) => {
     if (typeof currentValue !== 'object') {
       return `${currentValue}`;
     }
-    const lines = Object
-      .entries(currentValue)
-      .map(([key, { value1, value2, type }]) => {
+    const lines = currentValue
+      .map(({ key, type, value, children }) => {
         const newPath = (path === '') ? key : `${path}.${key}`;
-        if (type === 'unchanged' && typeof value1 === 'object') {
-          return iter(value1, newPath);
+        if (type === 'parent') {
+          return iter(children, newPath);
         }
         if (type === 'changed') {
+          const { value1, value2 } = value;
           return `Property '${newPath}' was updated. From ${resolveValue(value1)} to ${resolveValue(value2)}`;
         }
         if (type === 'added') {
-          return `Property '${newPath}' was added with value: ${resolveValue(value1)}`;
+          return `Property '${newPath}' was added with value: ${resolveValue(value)}`;
         }
         if (type === 'deleted') {
           return `Property '${newPath}' was removed`;

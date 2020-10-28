@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { formatParser, resolveKey } from './parsers.js';
+import formatParser from './parsers.js';
 import selectFormatter from './formatters/index.js';
 
 const genDiff = (file1, file2, format = 'stylish') => {
@@ -11,20 +11,20 @@ const genDiff = (file1, file2, format = 'stylish') => {
     const sortedKeys = _.sortBy(keys);
     const result = sortedKeys.map((key) => {
       if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
-        return [key, { value1: findDiff(obj1[key], obj2[key]), type: 'unchanged' }];
+        return { key: key, type: 'parent', children: findDiff(obj1[key], obj2[key]) };
       }
       if (!_.has(obj2, key)) {
-        return [key, { value1: resolveKey(obj1[key]), type: 'deleted' }];
+        return { key: key, type: 'deleted', value: obj1[key] };
       }
       if (!_.has(obj1, key)) {
-        return [key, { value1: resolveKey(obj2[key]), type: 'added' }];
+        return { key: key, type: 'added', value: obj2[key] };
       }
       if (obj1[key] === obj2[key]) {
-        return [key, { value1: resolveKey(obj1[key]), type: 'unchanged' }];
+        return { key: key, type: 'unchanged', value: obj1[key] };
       }
-      return [key, { value1: resolveKey(obj1[key]), value2: resolveKey(obj2[key]), type: 'changed' }];
+      return { key: key, type: 'changed', value: { value1: obj1[key], value2: obj2[key] } };
     });
-    return Object.fromEntries(result);
+    return result;
   };
   const internalTree = findDiff(newObj1, newObj2);
   return buildFormattedOutput(internalTree);

@@ -17,7 +17,7 @@ const resolveIni = (parsedIni) => {
   return Object.fromEntries(result);
 };
 
-export const formatParser = (filepath) => {
+const formatParser = (filepath) => {
   const readFile = (file) => fs.readFileSync(file, 'utf8');
   const extname = path.extname(filepath);
   if (extname === '.json') {
@@ -29,19 +29,4 @@ export const formatParser = (filepath) => {
   return resolveIni(ini.parse(readFile(filepath)));
 };
 
-export const resolveKey = (value) => {
-  if (value === null) {
-    return `${value}`;
-  }
-  if (typeof value !== 'object') {
-    return value;
-  }
-  const keys = Object.keys(value);
-  const result = keys.map((key) => {
-    if (typeof value[key] === 'object') {
-      return [key, { value1: resolveKey(value[key]) }];
-    }
-    return [key, { value1: value[key] }];
-  });
-  return Object.fromEntries(result);
-};
+export default formatParser;
