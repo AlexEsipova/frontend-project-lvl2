@@ -13,7 +13,6 @@ const buildOutput = (value, replacer = '    ', spacesCount = 1) => {
     if (typeof data !== 'object' || data === null) {
       return `${data}`;
     }
-    console.log(data);
     const entries = Object.entries(data);
 
     const lines = entries.map(([key, child]) => {
