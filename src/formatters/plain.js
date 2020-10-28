@@ -8,13 +8,15 @@ const resolveValue = (item) => {
   return `'${item}'`;
 };
 
-const buildPlain = (value) => {
+const buildPlain = (array) => {
   const iter = (currentValue, path) => {
     if (typeof currentValue !== 'object') {
       return `${currentValue}`;
     }
     const lines = currentValue
-      .map(({ key, type, value, children }) => {
+      .map(({
+        key, type, value, children,
+      }) => {
         const newPath = (path === '') ? key : `${path}.${key}`;
         if (type === 'parent') {
           return iter(children, newPath);
@@ -35,7 +37,7 @@ const buildPlain = (value) => {
 
     return lines.join('\n');
   };
-  return iter(value, '');
+  return iter(array, '');
 };
 
 export default buildPlain;

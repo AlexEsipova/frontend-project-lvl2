@@ -10,17 +10,17 @@ const resolveKey = (item, status) => {
 
 const buildOutput = (value, replacer = '    ', spacesCount = 1) => {
   const iter = (data, depth) => {
-    if (typeof data !== 'object') {
+    if (typeof data !== 'object' || data === null) {
       return `${data}`;
     }
-
+    console.log(data);
     const entries = Object.entries(data);
 
     const lines = entries.map(([key, child]) => {
       if (key.startsWith('+ ') || key.startsWith('- ') || key.startsWith('  ')) {
         return `  ${replacer.repeat(depth)}${key}: ${iter(child, depth + spacesCount)}`;
       }
-      return `  ${replacer.repeat(depth)}  ${key}: ${iter(child, depth + spacesCount)}`
+      return `  ${replacer.repeat(depth)}  ${key}: ${iter(child, depth + spacesCount)}`;
     });
     return `{\n${lines.join('\n')}\n${replacer.repeat(depth)}}`;
   };
@@ -30,8 +30,10 @@ const buildOutput = (value, replacer = '    ', spacesCount = 1) => {
 
 const buildTree = (array) => {
   const buildObj = (arr) => {
-    const result = arr.flatMap(element => {
-      const { key, type, value, children } = element;
+    const result = arr.flatMap((element) => {
+      const {
+        key, type, value, children,
+      } = element;
       const newKey = resolveKey(key, type);
       if (type === 'parent') {
         return [[newKey, buildObj(children)]];
@@ -45,7 +47,7 @@ const buildTree = (array) => {
       return [[newKey, value]];
     });
     return Object.fromEntries(result);
-  }
+  };
   return buildOutput(buildObj(array));
 };
 
