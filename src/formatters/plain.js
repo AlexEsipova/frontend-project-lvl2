@@ -1,8 +1,8 @@
 const resolveValue = (item) => {
-  if (typeof item === 'object') {
+  if (typeof item === 'object' && item !== null) {
     return '[complex value]';
   }
-  if (typeof item !== 'string' || item === 'null') {
+  if (typeof item !== 'string') {
     return `${item}`;
   }
   return `'${item}'`;
