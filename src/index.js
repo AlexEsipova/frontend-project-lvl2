@@ -22,7 +22,9 @@ const genDiff = (file1, file2, format = 'stylish') => {
       if (obj1[key] === obj2[key]) {
         return { key, type: 'unchanged', value: obj1[key] };
       }
-      return { key, type: 'changed', value: { value1: obj1[key], value2: obj2[key] } };
+      return {
+        key, type: 'changed', value1: obj1[key], value2: obj2[key],
+      };
     });
     return result;
   };

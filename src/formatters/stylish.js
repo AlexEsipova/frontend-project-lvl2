@@ -31,14 +31,13 @@ const buildTree = (array) => {
   const buildObj = (arr) => {
     const result = arr.flatMap((element) => {
       const {
-        key, type, value, children,
+        key, type, value, children, value1, value2,
       } = element;
       const newKey = resolveKey(key, type);
       if (type === 'parent') {
         return [[newKey, buildObj(children)]];
       }
       if (type === 'changed') {
-        const { value1, value2 } = value;
         const firstKey = resolveKey(key, 'deleted');
         const secondKey = resolveKey(key, 'added');
         return [[firstKey, value1], [secondKey, value2]];

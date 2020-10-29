@@ -15,14 +15,13 @@ const buildPlain = (array) => {
     }
     const lines = currentValue
       .map(({
-        key, type, value, children,
+        key, type, value, children, value1, value2,
       }) => {
         const newPath = (path === '') ? key : `${path}.${key}`;
         if (type === 'parent') {
           return iter(children, newPath);
         }
         if (type === 'changed') {
-          const { value1, value2 } = value;
           return `Property '${newPath}' was updated. From ${resolveValue(value1)} to ${resolveValue(value2)}`;
         }
         if (type === 'added') {
