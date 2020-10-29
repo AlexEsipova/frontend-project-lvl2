@@ -1,4 +1,4 @@
-import { test, expect, describe, beforeAll } from '@jest/globals';
+import { test, expect, describe } from '@jest/globals';
 import fs from 'fs';
 import path from 'path';
 import genDiff from '../src/index.js';
