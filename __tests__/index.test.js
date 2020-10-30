@@ -1,9 +1,13 @@
 import { test, expect, describe } from '@jest/globals';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import path from 'path';
 import genDiff from '../src/index.js';
 
-const getFixturePath = (filename) => path.join('__fixtures__', filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf8');
 
 describe.each([['.json'], ['.yml'], ['.ini']])('extension %s', (extention) => {

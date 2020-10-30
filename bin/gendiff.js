@@ -2,11 +2,14 @@
 
 import program from 'commander';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import path from 'path';
-import process from 'process';
 import genDiff from '../src/index.js';
 
-const contentOfPKG = JSON.parse(fs.readFileSync(path.resolve(`${process.cwd()}`, 'package.json')));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const contentOfPKG = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json')));
 
 program
   .version(contentOfPKG.version, '-V, --version', 'output the version number')
