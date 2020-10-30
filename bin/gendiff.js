@@ -6,7 +6,7 @@ import path from 'path';
 import process from 'process';
 import genDiff from '../src/index.js';
 
-const contentOfPKG = JSON.parse(fs.readFileSync(path.resolve(`${process.cwd()}`, 'frontend-project-lvl2', 'package.json')));
+const contentOfPKG = JSON.parse(fs.readFileSync(path.resolve(`${process.cwd()}`, 'package.json')));
 
 program
   .version(contentOfPKG.version, '-V, --version', 'output the version number')
