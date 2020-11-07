@@ -4,16 +4,18 @@ import program from 'commander';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import genDiff from '../src/index.js';
+import genDiff from '../index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const contentOfPKG = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json')));
+const pathToPkg = path.join(__dirname, '..', 'package.json');
+const readPkg = fs.readFileSync(pathToPkg);
+const pkg = JSON.parse(readPkg);
 
 program
-  .version(contentOfPKG.version, '-V, --version', 'output the version number')
-  .description(contentOfPKG.description)
+  .version(pkg.version, '-V, --version', 'output the version number')
+  .description(pkg.description)
   .option('-f, --format [type]', 'output format', 'stylish')
   .arguments('<filepath1> <filepath2>')
   .action((filepath1, filepath2) => {
