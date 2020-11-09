@@ -11,12 +11,12 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf8');
 
 describe.each([['.json'], ['.yml'], ['.ini']])('extension %s', (extension) => {
-  const data = [
+  const testTable = [
     ['stylish', readFile('expected_stylish.txt')],
     ['plain', readFile('expected_plain.txt')],
     ['json', readFile('expected_json.txt')],
   ];
-  test.each(data)('gendiff', (format, expected) => {
+  test.each(testTable)('gendiff', (format, expected) => {
     expect(genDiff(getFixturePath(`before${extension}`), getFixturePath(`after${extension}`), format))
       .toBe(expected);
   });
