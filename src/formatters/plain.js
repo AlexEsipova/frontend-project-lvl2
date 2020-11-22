@@ -4,7 +4,7 @@ const stringify = (item) => {
   if (typeof item === 'string') {
     return `'${item}'`;
   }
-  if (_.isObject(item)) {
+  if (_.isPlainObject(item)) {
     return '[complex value]';
   }
   return `${item}`;
@@ -24,6 +24,9 @@ const buildPlain = (array) => {
           deleted: () => [`Property '${newPath.join('.')}' was removed`],
           unchanged: () => [],
         };
+        if (!_.has(strings, type)) {
+          throw new Error(`Unknowm type '${type}'`);
+        }
         return strings[type]();
       });
 

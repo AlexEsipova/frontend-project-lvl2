@@ -33,6 +33,9 @@ export default (array) => {
         deleted: () => `  ${space}- ${key}: ${stringify(value, localIndentSize)}`,
         unchanged: () => `  ${space}  ${key}: ${stringify(value, localIndentSize)}`,
       };
+      if (!_.has(strings, type)) {
+        throw new Error(`Unknowm type '${type}'`);
+      }
       return strings[type]();
     });
     return `{\n${lines.join('\n')}\n${space}}`;
