@@ -1,42 +1,35 @@
-const resolveValue = (item) => {
-  if (typeof item === 'object' && item !== null) {
+import _ from 'lodash';
+
+const stringify = (item) => {
+  if (typeof item === 'string') {
+    return `'${item}'`;
+  }
+  if (_.isObject(item)) {
     return '[complex value]';
   }
-  if (typeof item !== 'string') {
-    return `${item}`;
-  }
-  return `'${item}'`;
+  return `${item}`;
 };
 
 const buildPlain = (array) => {
   const iter = (currentValue, path) => {
-    if (typeof currentValue !== 'object') {
-      return `${currentValue}`;
-    }
     const lines = currentValue
-      .map(({
+      .flatMap(({
         key, type, value, children, value1, value2,
       }) => {
-        const newPath = (path === '') ? key : `${path}.${key}`;
-        if (type === 'parent') {
-          return iter(children, newPath);
-        }
-        if (type === 'changed') {
-          return `Property '${newPath}' was updated. From ${resolveValue(value1)} to ${resolveValue(value2)}`;
-        }
-        if (type === 'added') {
-          return `Property '${newPath}' was added with value: ${resolveValue(value)}`;
-        }
-        if (type === 'deleted') {
-          return `Property '${newPath}' was removed`;
-        }
-        return null;
-      })
-      .filter((line) => line);
+        const newPath = [...path, key];
+        const strings = {
+          parent: () => iter(children, newPath),
+          changed: () => [`Property '${newPath.join('.')}' was updated. From ${stringify(value1)} to ${stringify(value2)}`],
+          added: () => [`Property '${newPath.join('.')}' was added with value: ${stringify(value)}`],
+          deleted: () => [`Property '${newPath.join('.')}' was removed`],
+          unchanged: () => [],
+        };
+        return strings[type]();
+      });
 
     return lines.join('\n');
   };
-  return iter(array, '');
+  return iter(array, []);
 };
 
 export default buildPlain;

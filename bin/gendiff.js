@@ -10,12 +10,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const pathToPkg = path.join(__dirname, '..', 'package.json');
-const readPkg = fs.readFileSync(pathToPkg);
-const pkg = JSON.parse(readPkg);
+const pkg = fs.readFileSync(pathToPkg);
+const parsedPkg = JSON.parse(pkg);
 
 program
-  .version(pkg.version, '-V, --version', 'output the version number')
-  .description(pkg.description)
+  .version(parsedPkg.version, '-V, --version', 'output the version number')
+  .description(parsedPkg.description)
   .option('-f, --format [type]', 'output format', 'stylish')
   .arguments('<filepath1> <filepath2>')
   .action((filepath1, filepath2) => {

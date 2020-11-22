@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import parse from './src/parsers/index.js';
 import format from './src/formatters/index.js';
-import findDiff from './src/diff.js';
+import findDiff from './src/findDiff.js';
 
 const getFileFormat = (fileName) => path.extname(fileName).slice(1);
 

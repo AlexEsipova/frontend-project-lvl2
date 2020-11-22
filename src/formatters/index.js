@@ -1,9 +1,9 @@
-import buildTree from './stylish.js';
-import buildPlain from './plain.js';
+import formatStylish from './stylish.js';
+import formatPlain from './plain.js';
 
 const formatters = {
-  stylish: buildTree,
-  plain: buildPlain,
+  stylish: formatStylish,
+  plain: formatPlain,
   json: JSON.stringify,
 };
 

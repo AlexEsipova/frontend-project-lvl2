@@ -1,52 +1,41 @@
-const resolveKey = (item, status) => {
-  if (status === 'added') {
-    return `+ ${item}`;
+import _ from 'lodash';
+
+const replacer = ' ';
+const spacesCount = 4;
+
+const stringify = (val, globalIndentSize) => {
+  if (!_.isObject(val)) {
+    return `${val}`;
   }
-  if (status === 'deleted') {
-    return `- ${item}`;
-  }
-  return `  ${item}`;
+  const localIndentSize = globalIndentSize + spacesCount;
+  const space = replacer.repeat(globalIndentSize);
+  const lines = Object.entries(val)
+    .map(([key, child]) => `  ${space}  ${key}: ${stringify(child, localIndentSize)}`);
+  return `{\n${lines.join('\n')}\n${space}}`;
 };
 
-const buildOutput = (value, replacer = '    ', spacesCount = 1) => {
-  const iter = (data, depth) => {
-    if (typeof data !== 'object' || data === null) {
-      return `${data}`;
-    }
-    const entries = Object.entries(data);
-
-    const lines = entries.map(([key, child]) => {
-      if (key.startsWith('+ ') || key.startsWith('- ') || key.startsWith('  ')) {
-        return `  ${replacer.repeat(depth)}${key}: ${iter(child, depth + spacesCount)}`;
-      }
-      return `  ${replacer.repeat(depth)}  ${key}: ${iter(child, depth + spacesCount)}`;
-    });
-    return `{\n${lines.join('\n')}\n${replacer.repeat(depth)}}`;
-  };
-
-  return iter(value, 0);
-};
-
-const buildTree = (array) => {
-  const buildObj = (arr) => {
-    const result = arr.flatMap((element) => {
+export default (array) => {
+  const iter = (arr, globalIndentSize) => {
+    const localIndentSize = globalIndentSize + spacesCount;
+    const space = replacer.repeat(globalIndentSize);
+    const lines = arr.flatMap((obj) => {
       const {
-        key, type, value, children, value1, value2,
-      } = element;
-      const newKey = resolveKey(key, type);
-      if (type === 'parent') {
-        return [[newKey, buildObj(children)]];
-      }
-      if (type === 'changed') {
-        const firstKey = resolveKey(key, 'deleted');
-        const secondKey = resolveKey(key, 'added');
-        return [[firstKey, value1], [secondKey, value2]];
-      }
-      return [[newKey, value]];
+        key, type, children, value, value1, value2,
+      } = obj;
+      const strings = {
+        parent: () => `  ${space}  ${key}: ${iter(children, localIndentSize)}`,
+        changed: () => {
+          const base = [value1, value2].map((item) => `${key}: ${stringify(item, localIndentSize)}`);
+          const [item1, item2] = base;
+          return [`  ${space}- ${item1}`, `  ${space}+ ${item2}`];
+        },
+        added: () => `  ${space}+ ${key}: ${stringify(value, localIndentSize)}`,
+        deleted: () => `  ${space}- ${key}: ${stringify(value, localIndentSize)}`,
+        unchanged: () => `  ${space}  ${key}: ${stringify(value, localIndentSize)}`,
+      };
+      return strings[type]();
     });
-    return Object.fromEntries(result);
+    return `{\n${lines.join('\n')}\n${space}}`;
   };
-  return buildOutput(buildObj(array));
+  return iter(array, 0);
 };
-
-export default buildTree;
