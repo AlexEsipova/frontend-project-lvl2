@@ -3,42 +3,55 @@ import _ from 'lodash';
 const replacer = ' ';
 const spacesCount = 4;
 
-const stringify = (val, globalIndentSize) => {
+const stringify = (val, externalIndentSize) => {
   if (!_.isObject(val)) {
     return `${val}`;
   }
-  const localIndentSize = globalIndentSize + spacesCount;
-  const space = replacer.repeat(globalIndentSize);
+  const internalIndentSize = externalIndentSize + spacesCount;
+  const indent = replacer.repeat(externalIndentSize);
   const lines = Object.entries(val)
-    .map(([key, child]) => `  ${space}  ${key}: ${stringify(child, localIndentSize)}`);
-  return `{\n${lines.join('\n')}\n${space}}`;
+    .map(([key, child]) => `  ${indent}  ${key}: ${stringify(child, internalIndentSize)}`);
+  return `{\n${lines.join('\n')}\n${indent}}`;
 };
 
-export default (array) => {
-  const iter = (arr, globalIndentSize) => {
-    const localIndentSize = globalIndentSize + spacesCount;
-    const space = replacer.repeat(globalIndentSize);
-    const lines = arr.flatMap((obj) => {
-      const {
-        key, type, children, value, value1, value2,
-      } = obj;
-      const strings = {
-        parent: () => `  ${space}  ${key}: ${iter(children, localIndentSize)}`,
-        changed: () => {
-          const base = [value1, value2].map((item) => `${key}: ${stringify(item, localIndentSize)}`);
-          const [item1, item2] = base;
-          return [`  ${space}- ${item1}`, `  ${space}+ ${item2}`];
-        },
-        added: () => `  ${space}+ ${key}: ${stringify(value, localIndentSize)}`,
-        deleted: () => `  ${space}- ${key}: ${stringify(value, localIndentSize)}`,
-        unchanged: () => `  ${space}  ${key}: ${stringify(value, localIndentSize)}`,
-      };
-      if (!_.has(strings, type)) {
-        throw new Error(`Unknowm type '${type}'`);
+const outputsTable = {
+  parent: (currentIndent, currentIndentSize, currentArgs, fn) => {
+    const { key, children } = currentArgs;
+    return `  ${currentIndent}  ${key}: ${fn(children, currentIndentSize)}`;
+  },
+  changed: (currentIndent, currentIndentSize, currentArgs) => {
+    const { key, value1, value2 } = currentArgs;
+    return [
+      `  ${currentIndent}- ${key}: ${stringify(value1, currentIndentSize)}`,
+      `  ${currentIndent}+ ${key}: ${stringify(value2, currentIndentSize)}`,
+    ];
+  },
+  added: (currentIndent, currentIndentSize, currentArgs) => {
+    const { key, value } = currentArgs;
+    return `  ${currentIndent}+ ${key}: ${stringify(value, currentIndentSize)}`;
+  },
+  deleted: (currentIndent, currentIndentSize, currentArgs) => {
+    const { key, value } = currentArgs;
+    return `  ${currentIndent}- ${key}: ${stringify(value, currentIndentSize)}`;
+  },
+  unchanged: (currentIndent, currentIndentSize, currentArgs) => {
+    const { key, value } = currentArgs;
+    return `  ${currentIndent}  ${key}: ${stringify(value, currentIndentSize)}`;
+  },
+};
+
+export default (tree) => {
+  const iter = (currentValue, externalIndentSize) => {
+    const internalIndentSize = externalIndentSize + spacesCount;
+    const indent = replacer.repeat(externalIndentSize);
+    const lines = currentValue.flatMap((branch) => {
+      const { type, ...rest } = branch;
+      if (!_.has(outputsTable, type)) {
+        throw new Error(`Unknown type '${type}'`);
       }
-      return strings[type]();
+      return outputsTable[type](indent, internalIndentSize, rest, iter);
     });
-    return `{\n${lines.join('\n')}\n${space}}`;
+    return `{\n${lines.join('\n')}\n${indent}}`;
   };
-  return iter(array, 0);
+  return iter(tree, 0);
 };

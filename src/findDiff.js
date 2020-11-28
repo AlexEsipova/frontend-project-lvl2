@@ -13,7 +13,7 @@ const findDiff = (obj1, obj2) => {
     if (_.isPlainObject(obj1[key]) && _.isPlainObject(obj2[key])) {
       return { key, type: 'parent', children: findDiff(obj1[key], obj2[key]) };
     }
-    if (obj1[key] === obj2[key]) {
+    if (_.isEqual(obj1[key], obj2[key])) {
       return { key, type: 'unchanged', value: obj1[key] };
     }
     return {

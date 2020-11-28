@@ -10,29 +10,39 @@ const stringify = (item) => {
   return `${item}`;
 };
 
-const buildPlain = (array) => {
+const outputsTable = {
+  parent: (currentPath, currentArgs, fn) => {
+    const { children } = currentArgs;
+    return fn(children, currentPath);
+  },
+  changed: (currentPath, currentArgs) => {
+    const { value1, value2 } = currentArgs;
+    return `Property '${currentPath.join('.')}' was updated. From ${stringify(value1)} to ${stringify(value2)}`;
+  },
+  added: (currentPath, currentArgs) => {
+    const { value } = currentArgs;
+    return `Property '${currentPath.join('.')}' was added with value: ${stringify(value)}`;
+  },
+  deleted: (currentPath) => `Property '${currentPath.join('.')}' was removed`,
+  unchanged: () => [],
+};
+
+const buildPlain = (tree) => {
   const iter = (currentValue, path) => {
     const lines = currentValue
-      .flatMap(({
-        key, type, value, children, value1, value2,
-      }) => {
+      .flatMap((branch) => {
+        const { key, type, ...rest } = branch;
         const newPath = [...path, key];
-        const strings = {
-          parent: () => iter(children, newPath),
-          changed: () => [`Property '${newPath.join('.')}' was updated. From ${stringify(value1)} to ${stringify(value2)}`],
-          added: () => [`Property '${newPath.join('.')}' was added with value: ${stringify(value)}`],
-          deleted: () => [`Property '${newPath.join('.')}' was removed`],
-          unchanged: () => [],
-        };
-        if (!_.has(strings, type)) {
-          throw new Error(`Unknowm type '${type}'`);
+
+        if (!_.has(outputsTable, type)) {
+          throw new Error(`Unknown type '${type}'`);
         }
-        return strings[type]();
+        return outputsTable[type](newPath, rest, iter);
       });
 
     return lines.join('\n');
   };
-  return iter(array, []);
+  return iter(tree, []);
 };
 
 export default buildPlain;
