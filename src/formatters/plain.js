@@ -31,13 +31,13 @@ const buildPlain = (tree) => {
   const iter = (currentValue, path) => {
     const lines = currentValue
       .flatMap((branch) => {
-        const { key, type, ...rest } = branch;
+        const { key, type } = branch;
         const newPath = [...path, key];
 
         if (!_.has(outputsTable, type)) {
           throw new Error(`Unknown type '${type}'`);
         }
-        return outputsTable[type](newPath, rest, iter);
+        return outputsTable[type](newPath, branch, iter);
       });
 
     return lines.join('\n');

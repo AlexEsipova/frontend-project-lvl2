@@ -45,11 +45,11 @@ export default (tree) => {
     const internalIndentSize = externalIndentSize + spacesCount;
     const indent = replacer.repeat(externalIndentSize);
     const lines = currentValue.flatMap((branch) => {
-      const { type, ...rest } = branch;
+      const { type } = branch;
       if (!_.has(outputsTable, type)) {
         throw new Error(`Unknown type '${type}'`);
       }
-      return outputsTable[type](indent, internalIndentSize, rest, iter);
+      return outputsTable[type](indent, internalIndentSize, branch, iter);
     });
     return `{\n${lines.join('\n')}\n${indent}}`;
   };
