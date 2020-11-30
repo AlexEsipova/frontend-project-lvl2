@@ -10,13 +10,13 @@ const stringify = (value) => {
   return `${value}`;
 };
 
-const pathStringify = (path) => path.join('.');
+const stringifyPath = (path) => path.join('.');
 
 const mapping = {
   parent: (path, { children }, iter) => iter(children, path),
-  changed: (path, { value1, value2 }) => `Property '${pathStringify(path)}' was updated. From ${stringify(value1)} to ${stringify(value2)}`,
-  added: (path, { value }) => `Property '${pathStringify(path)}' was added with value: ${stringify(value)}`,
-  deleted: (path) => `Property '${pathStringify(path)}' was removed`,
+  changed: (path, { value1, value2 }) => `Property '${stringifyPath(path)}' was updated. From ${stringify(value1)} to ${stringify(value2)}`,
+  added: (path, { value }) => `Property '${stringifyPath(path)}' was added with value: ${stringify(value)}`,
+  deleted: (path) => `Property '${stringifyPath(path)}' was removed`,
   unchanged: () => [],
 };
 
