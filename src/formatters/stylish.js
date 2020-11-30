@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const spacesCount = 4;
+const indentStep = 4;
 
 const getIndent = (indentSize) => ' '.repeat(indentSize);
 
@@ -10,19 +10,19 @@ const stringify = (value, indentSize) => {
   }
   const indent = getIndent(indentSize);
   const lines = Object.entries(value)
-    .map(([key, child]) => `${indent}    ${key}: ${stringify(child, indentSize + spacesCount)}`);
+    .map(([key, child]) => `${indent}    ${key}: ${stringify(child, indentSize + indentStep)}`);
   return `{\n${lines.join('\n')}\n${indent}}`;
 };
 
 const mapping = {
-  parent: (indentSize, { key, children }, iter) => `${getIndent(indentSize)}    ${key}: ${iter(children, indentSize + spacesCount)}`,
+  parent: (indentSize, { key, children }, iter) => `${getIndent(indentSize)}    ${key}: ${iter(children, indentSize + indentStep)}`,
   changed: (indentSize, { key, value1, value2 }) => [
-    `${getIndent(indentSize)}  - ${key}: ${stringify(value1, indentSize + spacesCount)}`,
-    `${getIndent(indentSize)}  + ${key}: ${stringify(value2, indentSize + spacesCount)}`,
+    `${getIndent(indentSize)}  - ${key}: ${stringify(value1, indentSize + indentStep)}`,
+    `${getIndent(indentSize)}  + ${key}: ${stringify(value2, indentSize + indentStep)}`,
   ],
-  added: (indentSize, { key, value }) => `${getIndent(indentSize)}  + ${key}: ${stringify(value, indentSize + spacesCount)}`,
-  deleted: (indentSize, { key, value }) => `${getIndent(indentSize)}  - ${key}: ${stringify(value, indentSize + spacesCount)}`,
-  unchanged: (indentSize, { key, value }) => `${getIndent(indentSize)}    ${key}: ${stringify(value, indentSize + spacesCount)}`,
+  added: (indentSize, { key, value }) => `${getIndent(indentSize)}  + ${key}: ${stringify(value, indentSize + indentStep)}`,
+  deleted: (indentSize, { key, value }) => `${getIndent(indentSize)}  - ${key}: ${stringify(value, indentSize + indentStep)}`,
+  unchanged: (indentSize, { key, value }) => `${getIndent(indentSize)}    ${key}: ${stringify(value, indentSize + indentStep)}`,
 };
 
 export default (tree) => {
