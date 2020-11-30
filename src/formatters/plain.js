@@ -1,48 +1,37 @@
 import _ from 'lodash';
 
-const stringify = (item) => {
-  if (typeof item === 'string') {
-    return `'${item}'`;
+const stringify = (value) => {
+  if (typeof value === 'string') {
+    return `'${value}'`;
   }
-  if (_.isPlainObject(item)) {
+  if (_.isPlainObject(value)) {
     return '[complex value]';
   }
-  return `${item}`;
+  return `${value}`;
 };
 
-const outputsTable = {
-  parent: (currentPath, currentArgs, fn) => {
-    const { children } = currentArgs;
-    return fn(children, currentPath);
-  },
-  changed: (currentPath, currentArgs) => {
-    const { value1, value2 } = currentArgs;
-    return `Property '${currentPath.join('.')}' was updated. From ${stringify(value1)} to ${stringify(value2)}`;
-  },
-  added: (currentPath, currentArgs) => {
-    const { value } = currentArgs;
-    return `Property '${currentPath.join('.')}' was added with value: ${stringify(value)}`;
-  },
-  deleted: (currentPath) => `Property '${currentPath.join('.')}' was removed`,
+const pathStringify = (path) => path.join('.');
+
+const mapping = {
+  parent: (path, { children }, iter) => iter(children, path),
+  changed: (path, { value1, value2 }) => `Property '${pathStringify(path)}' was updated. From ${stringify(value1)} to ${stringify(value2)}`,
+  added: (path, { value }) => `Property '${pathStringify(path)}' was added with value: ${stringify(value)}`,
+  deleted: (path) => `Property '${pathStringify(path)}' was removed`,
   unchanged: () => [],
 };
 
-const buildPlain = (tree) => {
-  const iter = (currentValue, path) => {
-    const lines = currentValue
-      .flatMap((branch) => {
-        const { key, type } = branch;
-        const newPath = [...path, key];
-
-        if (!_.has(outputsTable, type)) {
+export default (tree) => {
+  const iter = (nodes, path) => {
+    const lines = nodes
+      .flatMap((node) => {
+        const { key, type } = node;
+        if (!_.has(mapping, type)) {
           throw new Error(`Unknown type '${type}'`);
         }
-        return outputsTable[type](newPath, branch, iter);
+        return mapping[type]([...path, key], node, iter);
       });
 
     return lines.join('\n');
   };
   return iter(tree, []);
 };
-
-export default buildPlain;
