@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import yaml from 'js-yaml';
 import parseIni from './ini.js';
 
@@ -7,4 +8,10 @@ const parsers = {
   ini: parseIni,
 };
 
-export default (data, format) => parsers[format](data);
+export default (data, format) => {
+  if (!_.has(parsers, format)) {
+    throw new Error(`Unknown format '${format}'`);
+  }
+  return parsers[format](data);
+};
+

@@ -11,3 +11,6 @@ test:
 	
 test-coverage:
 	npm test -- --coverage --coverageProvider=v8
+
+link:
+	npm link

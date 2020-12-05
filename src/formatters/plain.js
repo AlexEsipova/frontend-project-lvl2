@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 const stringify = (value) => {
-  if (typeof value === 'string') {
+  if (_.isString(value)) {
     return `'${value}'`;
   }
   if (_.isPlainObject(value)) {
