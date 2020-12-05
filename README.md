@@ -13,14 +13,16 @@
 
 ### 1. `git clone https://github.com/AlexEsipova/frontend-project-lvl2.git`
 ### 2. from "frontend-project-lvl2" run the following commands:
-### `make install`
-### `make link`
+```sh
+$ make install
+$ make link
+```
 ### Ready to use!
 
 ## Usage description:
-
-### `gendiff -h`
-
+```sh
+$ gendiff -h
+```
 # Examples of using:
 ## .json
 
