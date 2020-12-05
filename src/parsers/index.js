@@ -14,4 +14,3 @@ export default (data, format) => {
   }
   return parsers[format](data);
 };
-
